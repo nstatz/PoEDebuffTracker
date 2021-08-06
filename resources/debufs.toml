@@ -1,0 +1,72 @@
+[conversion]
+color_type="gray" # either "gray" or "color". Gray is faster but MIGHT be less accurate.
+
+[ailment]
+	[ailment.shock]
+	type="shock"
+	key="2"
+	remove_debuff=true
+	
+	[ailment.ignite]
+	type="ignite"
+	key=""
+	remove_debuff=false
+	
+	[ailment.chill]
+	type="chill"
+	key=""
+	remove_debuff=false
+	
+	[ailment.frozen]
+	type="frozen"
+	key="3"
+	remove_debuff=true
+	
+	[ailment.bleed]
+	type="bleed"
+	key="1"
+	remove_debuff=true
+	
+	[ailment.corrupting_blood]
+	type="corrupting_blood"
+	key="1"
+	remove_debuff=true
+	
+	[ailment.poison]
+	type="poison"
+	key=""
+	remove_debuff=false
+
+
+[curse]
+	[curse.elemental_weakness]
+	type="elemental_weakness"
+	key=""
+	remove_debuff=false
+	
+	[curse.enfeeble]
+	type="enfeeble"
+	key=""
+	remove_debuff=false
+	
+	[curse.flamability]
+	type="flamability"
+	key=""
+	remove_debuff=false
+	
+	[curse.snipers_mark]
+	type="snipers_mark"
+	key=""
+	remove_debuff=false
+	
+	[curse.temporal_chains]
+	type="temporal_chains"
+	key=""
+	remove_debuff=false
+
+
+[ground]
+	[curse.burning_ground]
+	type="burning_ground"
+	key=""
+	remove_debuff=false
