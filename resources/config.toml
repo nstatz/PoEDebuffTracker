@@ -1,6 +1,12 @@
-[conversion]
+[imagetransformation]
+# usually debuffs are shown in the second row in the upper left corner 
+# for a resolution I have found to use a width of 550x200 px work the best.
+# width * height is the number of pixels to be observed, with the top left cornder being the origin.
+width=550
+hight=200
 color_type="gray" # either "gray" or "color". Gray is faster but MIGHT be less accurate.
 
+# If remove_debuff=true then there must be a file debuffname.png in \resources\debuff_templates
 [ailment]
 	[ailment.shock]
 	type="shock"
