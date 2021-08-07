@@ -1,17 +1,15 @@
 import cv2
-from matplotlib import pyplot as plt
 from pynput.keyboard import Key, Controller
 import os
 import datetime as dt
 import numpy as np
+from debufftracker import errors as customErrors
 
 #rst syntax guide: https://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html
 
-read_color_method = cv2.IMREAD_GRAYSCALE
 
 #use pyinput for flask
 
-#needs class configreader. config reader adds config to class
 #let this class inherit from thead, so it can create multiple instances as the same time
 class Status:
 
@@ -35,89 +33,81 @@ class Status:
         self.__remove_ailment = config["remove_debuff"]
 
         # color method to read template. Must match color method used to grab the screenshot
-        self.__color_method = cv2.IMREAD_GRAYSCALE
+        #self.__color_method = cv2.IMREAD_GRAYSCALE # grayscale doesn't work -> Same templates, different color
         if config["color_type"] == "color":
             self.__color_method = cv2.IMREAD_COLOR
 
-        template_path = os.path.join(os.getcwd(), os.pardir, "resources", f"{self.__type}.png")
+        template_path = os.path.join(os.getcwd(), os.pardir, "resources", "debuff_templates" , f"{self.__type}.png")
+        file_exists = os.path.exists(template_path)
+        if file_exists == False:
+            raise customErrors.FileConfigError(template_path)
         self.__template_img = cv2.imread(template_path, self.__color_method)
 
-    #obsololete, will be handled by debuff tracker
-    # def get_img_part(self, img_big):
-    #     """
-    #     Get Upper Left area of screen (debuffs) and return this part of the screen as a image
-    #     :param img_big: Screenshot of Screen
-    #     :type img_big: np.array
-    #
-    #     :return: cut image
-    #     :rtype: np.array
-    #     """
-    #
-    #     # in pixels
-    #     height = 200
-    #     width = 550
-    #     if len(img_big.shape) == 3:
-    #         image_small = example_img[0:height, 0:width, :]
-    #     else:
-    #         image_small = example_img[0:height, 0:width]
-    #
-    #     return image_small
+        self.__keyboad = Controller()
 
 
-    def check_ailment(self, current_screen):
+    def check_ailment(self, current_screen, show_match=False):
         """
         Checks if the ailment type of this class was found
 
         :param current_screen: Screenshot of current game sequence
         :type current_screen: np.array
 
-        :return: True of ailment was found, False if not. Also return False if ailment should not be removed anyway
+        :param show_match: Parameter to force show a match. Only for debugging purposes
+        :type show_match: Boolean
+
+        :return: True of ailment was found, False if not.
         :rtype: Boolean
         """
 
-        if self.__remove_ailment == False:
-            return False
-
+        #print(self.__template_img.dtype, current_screen.dtype)
+        #print(self.__template_img.shape, current_screen.shape)
         ailment_exists = False
-        #if self.__color_method == cv2.IMREAD_GRAYSCALE:
-        #    current_screen = cv2.cvtColor(current_screen, cv2.COLOR_BGR2GRAY)
+        # max value of normed methods return -1 to 1. They are slightly less performant,
+        # but interpretability is much easier. List of all options:
+        # https://docs.opencv.org/4.5.2/d4/dc6/tutorial_py_template_matching.html
+        result = cv2.matchTemplate(current_screen, self.__template_img, cv2.TM_CCORR_NORMED)
 
-        # obsolete
-        # #Upper left part of screen as np.array
-        # screen_part = self.get_img_part(current_screen)
-
-        # error occurs if template was not found
-        try:
-            result = cv2.matchTemplate(current_screen, self.__template_img, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        if max_val >= 0.95:
             ailment_exists = True
-        except cv2.error as err:
-            pass
-            #print(err)
-        # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+
+        if show_match == True:
+            height, width, d = self.__template_img.shape
+            top_left = max_loc
+            bottom_right = (top_left[0] + width, top_left[1] + height)
+            cv2.rectangle(current_screen, top_left, bottom_right, (0, 0, 255), 4)
+
+            cv2.imshow('status.py', current_screen)
+            cv2.waitKey()
 
         return ailment_exists
 
 
-    def get_action(self):
+    def perform_action(self):
         """
-        Returns Key to pe pressed or False of no action is necessary
+        Returns True / False wether or not the flask_key was pressed
 
-        :return: Return key to pe pressed or "-1" if no action is necessary
-        :rtype: String
+        :return: if flask_key was pressed
+        :rtype: Boolean
         """
         if self.__remove_ailment == False:
-            return "-1"
-        return self.__flask_key
+            return False
+
+        self.__keyboad.press(self.__flask_key)
+        self.__keyboad.release(self.__flask_key)
+        print(f"pressed {self.__flask_key} to remove {self.__type}")
+        return True
 
 if __name__ == "__main__":
     resource_dir = os.path.join(os.getcwd(), os.pardir, "resources")
     example_dir = os.path.join(resource_dir, "example_pictures")
-    example_img_path = os.path.join(example_dir, "ailments", "chill", "1.png")
+    example_img_path = os.path.join(example_dir, "ailments", "chill", "11.png")
 
     #template_img_path = os.path.join(template_dir, "chill.png")
 
-    read_color_method = cv2.IMREAD_GRAYSCALE
-    # # read_color_method = cv2.IMREAD_COLOR
+    #read_color_method = cv2.IMREAD_GRAYSCALE
+    read_color_method = cv2.IMREAD_COLOR
     #template_img = cv2.imread(template_img_path, read_color_method)
     example_img = cv2.imread(example_img_path, read_color_method)
 
@@ -125,78 +115,11 @@ if __name__ == "__main__":
         {
             "type" : "chill",
             "key" : "1",
-            "color_type" : "gray",
+            "color_type" : "color",
             "remove_debuff" : True
         }
     status_chill = Status(config)
-    result = status_chill.check_ailment(example_img)
+    result = status_chill.check_ailment(example_img, show_match=True)
     print(result)
 
-#
-# resource_dir = os.path.join(os.getcwd(), os.pardir, "resources")
-# template_dir = os.path.join(resource_dir, "debuff_templates")
-# example_dir = os.path.join(resource_dir, "example_pictures")
-#
-# template_img_path = os.path.join(template_dir, "bleed.png")
-#
-# example_img_path = os.path.join(example_dir, "ailments", "chill" ,"3.png")
 
-# use cv2.IMREAD_GRAYSCALE if possible. Only 1/3 of data compared to color cv2.IMREAD_COLOR
-
-
-# read images
-# read_color_method = cv2.IMREAD_GRAYSCALE
-# # read_color_method = cv2.IMREAD_COLOR
-# template_img = cv2.imread(template_img_path, read_color_method)
-# print(template_img.shape)
-# #h, w = template_img.shape
-#
-# #cv2.imshow('image', template_img)
-# #cv2.waitKey()
-#
-# #gray
-# read_color_method = cv2.IMREAD_GRAYSCALE
-# example_img = cv2.imread(example_img_path, read_color_method)
-# image_small = example_img[0:200, 0:550]
-#
-# #color
-# read_color_method = cv2.IMREAD_COLOR
-# example_img = cv2.imread(example_img_path, read_color_method)
-# image_small = example_img[0:200, 0:550, :]
-
-#print(type(example_img[0][0][0]))
-#print(example_img[0][:500].shape)
-#print(np.array(example_img[0][:500]))
-#example_img_part = example_img
-#print(example_img_part[0][:500].shape)
-#example_img_part = np.array([np.array(example_img[0][:500]), np.array(example_img[0][:300])])
-# example_img_part[0] = example_img_part[0][:500]
-# example_img_part[1] = example_img_part[0][:400]
-#print(example_img_part.shape)
-# print(example_img[0].shape)
-# cv2.imshow('image', image_small)
-# cv2.waitKey()
-#
-#
-# dt_start= dt.datetime.now()
-# try:
-#     result = cv2.matchTemplate(example_img, template_img, cv2.TM_CCOEFF_NORMED)
-# except cv2.error as err:
-#     print(err)
-# min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-# dt_end = dt.datetime.now()
-# print(dt_end-dt_start)
-
-# def display_match(result, example_img):
-#     #blue
-#     marker_color = (255, 0, 0)
-#     top_left = max_loc
-#     bottom_right = (top_left[0] + w, top_left[1] + h)
-#     cv2.rectangle(example_img, top_left, bottom_right, color = marker_color,thickness=3)
-#     plt.subplot(121), plt.imshow(result, cmap='gray')
-#     plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
-#     plt.subplot(122), plt.imshow(example_img, cmap='gray')
-#     plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
-#     plt.suptitle("TM_CCOEFF_NORMED")
-#     plt.show()
-#

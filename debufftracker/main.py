@@ -11,14 +11,16 @@ import os
 
 
 class ConfigReader:
-
+    """
+    This class contains functions to read and return configuration Data
+    """
     def __init__(self):
         self.__config_path = os.path.join(os.getcwd(), os.pardir, "resources", "config.toml")
         self.__toml_content = toml.load(f=self.__config_path)
 
 
     def get_imagetransformation_config(self):
-        allowed_colors = ["gray", "color"]
+        allowed_colors = ["color"]
         if self.__toml_content["imagetransformation"]["color_type"].lower() not in allowed_colors:
             raise customErrors.ColorConfigError(self.__toml_content["imagetransformation"]["color_type"])
         return self.__toml_content["imagetransformation"]
@@ -30,17 +32,34 @@ class ConfigReader:
 
 
 class ScreenTracker:
-
+    """
+    This class contains functions to track the screen content
+    """
     def __init__(self):
         self._config_reader = ConfigReader()
         self.__image_config = self._config_reader.get_imagetransformation_config()
 
     def create_removestatus_dict(self):
+        """
+        Iterates over each status type in ["ailment", "curse", "ground"] and adds the status specific config
+        to dictionary relevant_dicts. Then return relevant dict
+        :return: relevant_dicts, a dictionary with status configs.
+        :rtype: Dictionary
+        """
         def get_relevant_dicts(d):
+            """
+            A helpfunction, only callable inside create_removestatus_dict, to "flatten" a dictionary and
+            only return results where remove_debuff is True
+
+            :param d: dictionary that contains sub dictionaries. Each subdictionary represents a status config
+            :return: big_dict. Da Dictionary that only contains configs where subdict["remove_debuff"] == True)
+            :rtype: Dictionary
+            """
             big_dict = {}
             for key in d.keys():
+                # "Flatten" dictionary if True
                 if (d[key]["key"] !="") and (d[key]["remove_debuff"] == True):
-                    big_dict.update(d)
+                    big_dict[key] = d[key]
                 elif (d[key]["key"] =="") and (d[key]["remove_debuff"] == True):
                     raise customErrors.StatusConfigError("if remove_debuff is true, then keybinding must be set")
 
@@ -67,6 +86,13 @@ class ScreenTracker:
 
 
     def create_status_instances(self):
+        """
+        Create instances of status.Staus and add them to a dictionary self.__status_instances.
+        Using this dictionary enables managing those instances, when necessary
+
+        :return: None
+        """
+
         # config example needed to initiate status classes
         # config = \
         # {
@@ -94,7 +120,13 @@ class ScreenTracker:
 
 
     def get_debuffs(self):
-        start_dt = dt.datetime.now()
+        """
+        Takes a partial screenshot, then iterates over the status.Status instances and checks if a harmful effect of
+        type of instance was found. If so, remove the effect.
+
+        :return: debuffs_dict, a dict that contains the negative effect and a dt stamp when it was recognized
+        :rtype: Dictionary
+        """
         screen = self.grab_transform_screen()
         debuffs_dict = {}
         for status_name in self.__status_instances.keys():
@@ -103,21 +135,32 @@ class ScreenTracker:
             r = status_instance.check_ailment(screen)
             if r == True:
                 debuffs_dict[status_name] = f"Found {dt.datetime.now()}"
-
-        end_dt = dt.datetime.now()
+                status_instance.perform_action()
 
         return debuffs_dict
 
 
     def run(self):
+        """
+        Infinitive loop that calls self.get_debuffs() which causes any found negative effects to be removed.
+
+        :return: None
+        """
         continue_run = True
+        print("Debuff Tracker started")
         while continue_run==True:
             debuffs = self.get_debuffs()
             if len(debuffs) > 0:
                 print(debuffs)
-            time.sleep(2)
+            time.sleep(1)
 
     def grab_transform_screen(self):
+        """
+        Make a partial Screenshot, transform to screenshot to numpy array and return transformed screenshot.
+
+        :return: screen_cv2, partial screenshot that contains all 3 color channels. Order is BGR
+        :rtype: np.array
+        """
 
         # I compared 3 methods over 1000 iterations:
         # pyautogui: take screenshot, then cut and transform (avg time 0:00:00.054545)
@@ -126,16 +169,25 @@ class ScreenTracker:
         # mss is lightweight and fast
         with mss.mss() as sct:
             # The screen part to capture
-            monitor_area = {"top": 0, "left": 0, "width": 500, "height": 250}
+            monitor_area = \
+                {
+                    "top": 0,
+                    "left": 0,
+                    "width": self.__image_config["width"],
+                    "height": self.__image_config["height"]
+                }
             screen = sct.grab(monitor_area)
             screen_cv2 = np.array(screen)
+            screen_cv2 = screen_cv2[:,:,:3] # 4th channel contains valu 255 (uint8). Remove fourth channel
 
             end_dt = dt.datetime.now()
             fname = str(end_dt).replace(":", "") + ".png"
             p = os.path.join(os.getcwd(), os.pardir, "resources", "track_screen", fname)
-            cv2.imwrite(p, screen_cv2)
+            #cv2.imwrite(p, screen_cv2)
+            #
+            # cv2.imshow('main.py', screen_cv2)
+            # cv2.waitKey()
 
-            screen_cv2 = cv2.cvtColor(screen_cv2, cv2.COLOR_BGR2GRAY)
         return screen_cv2
 
 
@@ -143,5 +195,3 @@ if __name__ == "__main__":
     screentracker = ScreenTracker()
     screentracker.create_status_instances()
     screentracker.run()
-    #screentracker.get_debuffs()
-    #screentracker.grab_transform_screen()

@@ -25,3 +25,13 @@ class StatusConfigError(ConfigError):
 
     def __str__(self):
         return f"""Problem with status config occured: {self.problem_string}"""
+
+class FileConfigError(ConfigError):
+    """
+    Exception class that can be raised if invalid colors are used
+    """
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def __str__(self):
+        return f"{self.file_path} not found"
