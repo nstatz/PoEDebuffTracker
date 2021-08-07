@@ -4,14 +4,10 @@ import os
 import datetime as dt
 import numpy as np
 from debufftracker import errors as customErrors
+import threading
 
-#rst syntax guide: https://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html
-
-
-#use pyinput for flask
-
-#let this class inherit from thead, so it can create multiple instances as the same time
-class Status:
+# class inherits from threading.Thread, so that multiple instances can run in parallel
+class Status(threading.Thread):
 
     def __init__(self, config):
         """
@@ -28,6 +24,7 @@ class Status:
         #     "color_type" : "gray",
         #     "remove_debuff" : True
         # }
+        threading.Thread.__init__(self)
         self.__type = config["type"]
         self.__flask_key = config["key"]
         self.__remove_ailment = config["remove_debuff"]
@@ -46,6 +43,26 @@ class Status:
         self.__keyboad = Controller()
 
 
+    def run(self, current_screen):
+        """
+        Overwrites run function from threading.Thread
+
+        :param current_screen: partial screenshot of upper left area
+        :type current_screen: np.array
+
+        :return: empty dict if no action, action_dict if debuff was removed
+        :rtype: dict
+        """
+        effect_exists = self.check_ailment(current_screen)
+        if effect_exists == False:
+            return {}
+
+        if effect_exists == True:
+            self.perform_action()
+        action_dict = {"type": self.__type, "key_pressed": self.__flask_key, "dt": dt.datetime.now()}
+        return action_dict
+
+
     def check_ailment(self, current_screen, show_match=False):
         """
         Checks if the ailment type of this class was found
@@ -60,8 +77,6 @@ class Status:
         :rtype: Boolean
         """
 
-        #print(self.__template_img.dtype, current_screen.dtype)
-        #print(self.__template_img.shape, current_screen.shape)
         ailment_exists = False
         # max value of normed methods return -1 to 1. They are slightly less performant,
         # but interpretability is much easier. List of all options:
@@ -99,6 +114,8 @@ class Status:
         print(f"pressed {self.__flask_key} to remove {self.__type}")
         return True
 
+# just for seperate Tests. This won't be executed, when imported externally
+# will be removed once Tool is completed
 if __name__ == "__main__":
     resource_dir = os.path.join(os.getcwd(), os.pardir, "resources")
     example_dir = os.path.join(resource_dir, "example_pictures")

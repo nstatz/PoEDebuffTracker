@@ -1,14 +1,15 @@
 import numpy as np
-import cv2
 import datetime as dt
 import mss
 import toml
 from debufftracker import errors as customErrors
 from debufftracker import status
 import time
-
+import logging
 import os
 
+logging_path = os.path.join(os.getcwd(), os.pardir, "resources", "infos.log")
+logging.basicConfig(filename=logging_path, level=logging.INFO)
 
 class ConfigReader:
     """
@@ -119,10 +120,11 @@ class ScreenTracker:
         self.__status_instances = status_instances_dict
 
 
-    def get_debuffs(self):
+    def manage_status_instances(self):
         """
         Takes a partial screenshot, then iterates over the status.Status instances and checks if a harmful effect of
-        type of instance was found. If so, remove the effect.
+        type of instance was found. If so, remove the effect. Threads will currently not be joined.
+        This will cause asynchronous actions.
 
         :return: debuffs_dict, a dict that contains the negative effect and a dt stamp when it was recognized
         :rtype: Dictionary
@@ -130,12 +132,11 @@ class ScreenTracker:
         screen = self.grab_transform_screen()
         debuffs_dict = {}
         for status_name in self.__status_instances.keys():
-            # print(status_name)
             status_instance = self.__status_instances[status_name]
-            r = status_instance.check_ailment(screen)
-            if r == True:
-                debuffs_dict[status_name] = f"Found {dt.datetime.now()}"
-                status_instance.perform_action()
+            debuff_status = status_instance.run(screen) # each instance is run as a seperate Thread
+            if len(debuff_status) > 0:
+                logging.INFO(f"{debuff_status}")
+                print(debuff_status)
 
         return debuffs_dict
 
@@ -149,7 +150,7 @@ class ScreenTracker:
         continue_run = True
         print("Debuff Tracker started")
         while continue_run==True:
-            debuffs = self.get_debuffs()
+            debuffs = self.manage_status_instances()
             if len(debuffs) > 0:
                 print(debuffs)
             time.sleep(1)
