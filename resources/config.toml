@@ -15,8 +15,8 @@ color_type="color" # currently only uses color_methd, color. Grayscale leads to 
 	
 	[ailment.ignite]
 	type="ignite"
-	key="4"
-	remove_debuff=true
+	key=""
+	remove_debuff=false
 	
 	[ailment.chill]
 	type="chill"

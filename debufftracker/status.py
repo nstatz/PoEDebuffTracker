@@ -59,7 +59,7 @@ class Status(threading.Thread):
 
         if effect_exists == True:
             self.perform_action()
-        action_dict = {"type": self.__type, "key_pressed": self.__flask_key, "dt": dt.datetime.now()}
+        action_dict = {"type": str(self.__type), "key_pressed": str(self.__flask_key), "dt": str( dt.datetime.now() )}
         return action_dict
 
 
@@ -111,7 +111,7 @@ class Status(threading.Thread):
 
         self.__keyboad.press(self.__flask_key)
         self.__keyboad.release(self.__flask_key)
-        print(f"pressed {self.__flask_key} to remove {self.__type}")
+        #print(f"pressed {self.__flask_key} to remove {self.__type}")
         return True
 
 # just for seperate Tests. This won't be executed, when imported externally

@@ -7,6 +7,7 @@ from debufftracker import status
 import time
 import logging
 import os
+import json
 
 logging_path = os.path.join(os.getcwd(), os.pardir, "resources", "infos.log")
 logging.basicConfig(filename=logging_path, level=logging.INFO)
@@ -135,7 +136,8 @@ class ScreenTracker:
             status_instance = self.__status_instances[status_name]
             debuff_status = status_instance.run(screen) # each instance is run as a seperate Thread
             if len(debuff_status) > 0:
-                logging.INFO(f"{debuff_status}")
+                debuff_status_str = json.dumps(debuff_status)
+                logging.info(debuff_status_str)
                 print(debuff_status)
 
         return debuffs_dict
@@ -150,9 +152,9 @@ class ScreenTracker:
         continue_run = True
         print("Debuff Tracker started")
         while continue_run==True:
-            debuffs = self.manage_status_instances()
-            if len(debuffs) > 0:
-                print(debuffs)
+            self.manage_status_instances()
+            # if len(debuffs) > 0:
+            #     print(debuffs)
             time.sleep(1)
 
     def grab_transform_screen(self):
