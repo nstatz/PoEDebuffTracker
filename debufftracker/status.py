@@ -1,13 +1,23 @@
 import cv2
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Controller
 import os
 import datetime as dt
-import numpy as np
 from debufftracker import errors as customErrors
-import threading
+import logging
 
-# class inherits from threading.Thread, so that multiple instances can run in parallel
-class Status(threading.Thread):
+log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter(log_format)
+
+streamHandler = logging.StreamHandler()
+streamHandler.setFormatter(formatter)
+
+
+# Status class used to inherit from threading.Thread. While this was much more elegant it caused issues being hard to control,
+# as Thread.start() was not invoked, but Thread.run(), to be callable multiple times without having the need to create
+# the same instance over and over again. Creating new instances of Status is avoidable overhead.
+class Status:
 
     def __init__(self, config):
         """
@@ -24,28 +34,29 @@ class Status(threading.Thread):
         #     "color_type" : "gray",
         #     "remove_debuff" : True
         # }
-        threading.Thread.__init__(self)
         self.__type = config["type"]
         self.__flask_key = config["key"]
         self.__remove_ailment = config["remove_debuff"]
 
         # color method to read template. Must match color method used to grab the screenshot
-        #self.__color_method = cv2.IMREAD_GRAYSCALE # grayscale doesn't work -> Same templates, different color
+        # self.__color_method = cv2.IMREAD_GRAYSCALE # grayscale doesn't work -> Same templates, different color
         if config["color_type"] == "color":
             self.__color_method = cv2.IMREAD_COLOR
 
-        template_path = os.path.join(os.getcwd(), os.pardir, "resources", "debuff_templates" , f"{self.__type}.png")
+        template_path = os.path.join(os.getcwd(), os.pardir, "resources", "debuff_templates", f"{self.__type}.png")
         file_exists = os.path.exists(template_path)
-        if file_exists == False:
+        if not file_exists:
             raise customErrors.FileConfigError(template_path)
         self.__template_img = cv2.imread(template_path, self.__color_method)
 
         self.__keyboad = Controller()
 
+        self.__last_used = dt.datetime.now()- dt.timedelta(seconds=10) # will be changed after each effect removal
+        self.last_action = {}  # will be changed after each run( call
 
     def run(self, current_screen):
         """
-        Overwrites run function from threading.Thread
+        Causes the the effect check to run and removes effect if it exists
 
         :param current_screen: partial screenshot of upper left area
         :type current_screen: np.array
@@ -53,15 +64,27 @@ class Status(threading.Thread):
         :return: empty dict if no action, action_dict if debuff was removed
         :rtype: dict
         """
-        effect_exists = self.check_ailment(current_screen)
-        if effect_exists == False:
+
+        timedelta_seconds = (dt.datetime.now()-self.__last_used).seconds
+        if timedelta_seconds < 4:
+            info = f"{self.__type}: Immunity lock still active (4s total)"
+            logger.info(info)
+            self.last_action = {}
             return {}
 
-        if effect_exists == True:
-            self.perform_action()
-        action_dict = {"type": str(self.__type), "key_pressed": str(self.__flask_key), "dt": str( dt.datetime.now() )}
-        return action_dict
+        effect_exists = self.check_ailment(current_screen)
 
+        if not effect_exists:
+            return {}
+
+        if effect_exists:
+            self.perform_action()
+            dt_pressed = dt.datetime.now()
+
+        action_dict = {"type": str(self.__type), "key_pressed": str(self.__flask_key)}
+        self.last_action = action_dict
+        logger.info(action_dict)
+        return action_dict
 
     def check_ailment(self, current_screen, show_match=False):
         """
@@ -76,7 +99,6 @@ class Status(threading.Thread):
         :return: True of ailment was found, False if not.
         :rtype: Boolean
         """
-
         ailment_exists = False
         # max value of normed methods return -1 to 1. They are slightly less performant,
         # but interpretability is much easier. List of all options:
@@ -87,7 +109,7 @@ class Status(threading.Thread):
         if max_val >= 0.95:
             ailment_exists = True
 
-        if show_match == True:
+        if show_match:
             height, width, d = self.__template_img.shape
             top_left = max_loc
             bottom_right = (top_left[0] + width, top_left[1] + height)
@@ -97,7 +119,6 @@ class Status(threading.Thread):
             cv2.waitKey()
 
         return ailment_exists
-
 
     def perform_action(self):
         """
@@ -111,8 +132,9 @@ class Status(threading.Thread):
 
         self.__keyboad.press(self.__flask_key)
         self.__keyboad.release(self.__flask_key)
-        #print(f"pressed {self.__flask_key} to remove {self.__type}")
+        self.__last_used = dt.datetime.now()
         return True
+
 
 # just for seperate Tests. This won't be executed, when imported externally
 # will be removed once Tool is completed
@@ -121,22 +143,20 @@ if __name__ == "__main__":
     example_dir = os.path.join(resource_dir, "example_pictures")
     example_img_path = os.path.join(example_dir, "ailments", "chill", "11.png")
 
-    #template_img_path = os.path.join(template_dir, "chill.png")
+    # template_img_path = os.path.join(template_dir, "chill.png")
 
-    #read_color_method = cv2.IMREAD_GRAYSCALE
+    # read_color_method = cv2.IMREAD_GRAYSCALE
     read_color_method = cv2.IMREAD_COLOR
-    #template_img = cv2.imread(template_img_path, read_color_method)
+    # template_img = cv2.imread(template_img_path, read_color_method)
     example_img = cv2.imread(example_img_path, read_color_method)
 
     config = \
         {
-            "type" : "chill",
-            "key" : "1",
-            "color_type" : "color",
-            "remove_debuff" : True
+            "type": "chill",
+            "key": "1",
+            "color_type": "color",
+            "remove_debuff": True
         }
     status_chill = Status(config)
     result = status_chill.check_ailment(example_img, show_match=True)
     print(result)
-
-

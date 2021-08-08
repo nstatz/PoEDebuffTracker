@@ -8,9 +8,8 @@ import time
 import logging
 import os
 import json
+from threading import Thread
 
-logging_path = os.path.join(os.getcwd(), os.pardir, "resources", "infos.log")
-logging.basicConfig(filename=logging_path, level=logging.INFO)
 
 class ConfigReader:
     """
@@ -124,21 +123,31 @@ class ScreenTracker:
     def manage_status_instances(self):
         """
         Takes a partial screenshot, then iterates over the status.Status instances and checks if a harmful effect of
-        type of instance was found. If so, remove the effect. Threads will currently not be joined.
-        This will cause asynchronous actions.
+        type of instance was found. If so, remove the effect. Threads will be joined to prevent chaotic behaviour.
 
         :return: debuffs_dict, a dict that contains the negative effect and a dt stamp when it was recognized
         :rtype: Dictionary
         """
+
+        #https://www.geeksforgeeks.org/how-to-create-a-new-thread-in-python/
         screen = self.grab_transform_screen()
         debuffs_dict = {}
+        thread_list = []
         for status_name in self.__status_instances.keys():
             status_instance = self.__status_instances[status_name]
-            debuff_status = status_instance.run(screen) # each instance is run as a seperate Thread
-            if len(debuff_status) > 0:
-                debuff_status_str = json.dumps(debuff_status)
-                logging.info(debuff_status_str)
-                print(debuff_status)
+            #status_instance.run(screen) # each instance is run as a seperate Thread
+            t = Thread(target=status_instance.run, args=(screen, ))
+            thread_list.append(t)
+            t.start()
+            #
+            # debuff_status = status_instance.last_action
+            # # if len(debuff_status) > 0:
+            # #     debuff_status_str = json.dumps(debuff_status)
+            # #     print(debuff_status)
+
+        # wait for threads to finish. Not waiting caused chaotic behavior.
+        for t in thread_list:
+            t.join()
 
         return debuffs_dict
 
