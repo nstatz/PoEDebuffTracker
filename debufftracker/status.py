@@ -7,11 +7,12 @@ import logging
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel('INFO')
 formatter = logging.Formatter(log_format)
 
 streamHandler = logging.StreamHandler()
 streamHandler.setFormatter(formatter)
+logger.addHandler(streamHandler)
 
 
 # Status class used to inherit from threading.Thread. While this was much more elegant it caused issues being hard to control,
