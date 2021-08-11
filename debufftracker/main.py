@@ -38,7 +38,8 @@ class ScreenTracker:
     """
     def __init__(self):
         self._config_reader = ConfigReader()
-        self.__image_config = self._config_reader.get_imagetransformation_config()
+        self.image_config = self._config_reader.get_imagetransformation_config()
+        self.status_instances = {}
 
     def create_removestatus_dict(self):
         """
@@ -98,7 +99,7 @@ class ScreenTracker:
         # config = \
         # {
         #     "type" : "bleed",
-        #     "flask_key" : "1",
+        #     "flask" : "1",
         #     "color_type" : "gray",
         #     "remove_debuff" : True
         # }
@@ -113,11 +114,11 @@ class ScreenTracker:
             #print(remove_status_dicts)
             status_config = remove_status_dicts[status_type]
             #add color_type to config. This is required to read the template with the correct method (gray/color)
-            status_config["color_type"] = self.__image_config["color_type"]
+            status_config["color_type"] = self.image_config["color_type"]
             status_instance = status.Status(status_config)
             status_instances_dict[status_type] = status_instance
 
-        self.__status_instances = status_instances_dict
+        self.status_instances = status_instances_dict
 
 
     def manage_status_instances(self):
@@ -133,8 +134,8 @@ class ScreenTracker:
         screen = self.grab_transform_screen()
         debuffs_dict = {}
         thread_list = []
-        for status_name in self.__status_instances.keys():
-            status_instance = self.__status_instances[status_name]
+        for status_name in self.status_instances.keys():
+            status_instance = self.status_instances[status_name]
             #status_instance.run(screen) # each instance is run as a seperate Thread
             t = Thread(target=status_instance.run, args=(screen, ))
             thread_list.append(t)
@@ -177,8 +178,8 @@ class ScreenTracker:
                 {
                     "top": 0,
                     "left": 0,
-                    "width": self.__image_config["width"],
-                    "height": self.__image_config["height"]
+                    "width": self.image_config["width"],
+                    "height": self.image_config["height"]
                 }
             screen = sct.grab(monitor_area)
             screen_cv2 = np.array(screen)

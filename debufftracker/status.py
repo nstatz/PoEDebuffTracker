@@ -31,7 +31,7 @@ class Status:
         # config = \
         # {
         #     "type" : "bleed",
-        #     "flask_key" : "1",
+        #     "key" : "1",
         #     "color_type" : "color",
         #     "remove_debuff" : True
         # }
@@ -115,7 +115,8 @@ class Status:
             top_left = max_loc
             bottom_right = (top_left[0] + width, top_left[1] + height)
             cv2.rectangle(current_screen, top_left, bottom_right, (0, 0, 255), 4)
-
+            print(f"min_val: {min_val}, max_val: {max_val},\
+            min_loc :{min_loc}, max_loc: {max_loc}")
             cv2.imshow('status.py', current_screen)
             cv2.waitKey()
 
@@ -142,9 +143,7 @@ class Status:
 if __name__ == "__main__":
     resource_dir = os.path.join(os.getcwd(), os.pardir, "resources")
     example_dir = os.path.join(resource_dir, "example_pictures")
-    example_img_path = os.path.join(example_dir, "ailments", "chill", "11.png")
-
-    # template_img_path = os.path.join(template_dir, "chill.png")
+    example_img_path = os.path.join(example_dir, "ailments", "shock", "3.png")
 
     # read_color_method = cv2.IMREAD_GRAYSCALE
     read_color_method = cv2.IMREAD_COLOR
@@ -153,7 +152,7 @@ if __name__ == "__main__":
 
     config = \
         {
-            "type": "chill",
+            "type": "bleed",
             "key": "1",
             "color_type": "color",
             "remove_debuff": True
