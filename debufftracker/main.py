@@ -88,7 +88,7 @@ class ScreenTracker:
 
     def create_status_instances(self):
         """
-        Create instances of status.Staus and add them to a dictionary self.__status_instances.
+        Create instances of status.Status and add them to a dictionary self.__status_instances.
         Using this dictionary enables managing those instances, when necessary
 
         :return: None
@@ -139,11 +139,6 @@ class ScreenTracker:
             t = Thread(target=status_instance.run, args=(screen, ))
             thread_list.append(t)
             t.start()
-            #
-            # debuff_status = status_instance.last_action
-            # # if len(debuff_status) > 0:
-            # #     debuff_status_str = json.dumps(debuff_status)
-            # #     print(debuff_status)
 
         # wait for threads to finish. Not waiting caused chaotic behavior.
         for t in thread_list:
@@ -151,10 +146,9 @@ class ScreenTracker:
 
         return debuffs_dict
 
-
     def run(self):
         """
-        Infinitive loop that calls self.get_debuffs() which causes any found negative effects to be removed.
+        Infinitive loop that calls self.manage_status_instances() which causes any found negative effects to be removed.
 
         :return: None
         """
@@ -162,8 +156,6 @@ class ScreenTracker:
         print("Debuff Tracker started")
         while continue_run==True:
             self.manage_status_instances()
-            # if len(debuffs) > 0:
-            #     print(debuffs)
             time.sleep(1)
 
     def grab_transform_screen(self):
@@ -190,15 +182,11 @@ class ScreenTracker:
                 }
             screen = sct.grab(monitor_area)
             screen_cv2 = np.array(screen)
-            screen_cv2 = screen_cv2[:,:,:3] # 4th channel contains valu 255 (uint8). Remove fourth channel
+            screen_cv2 = screen_cv2[:,:,:3] # 4th channel contains value 255 (uint8). Remove fourth channel
 
             end_dt = dt.datetime.now()
             fname = str(end_dt).replace(":", "") + ".png"
             p = os.path.join(os.getcwd(), os.pardir, "resources", "track_screen", fname)
-            #cv2.imwrite(p, screen_cv2)
-            #
-            # cv2.imshow('main.py', screen_cv2)
-            # cv2.waitKey()
 
         return screen_cv2
 

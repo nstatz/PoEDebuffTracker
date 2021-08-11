@@ -32,7 +32,7 @@ class Status:
         # {
         #     "type" : "bleed",
         #     "flask_key" : "1",
-        #     "color_type" : "gray",
+        #     "color_type" : "color",
         #     "remove_debuff" : True
         # }
         self.__type = config["type"]
