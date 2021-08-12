@@ -138,7 +138,7 @@ class Status:
         return True
 
 
-# just for seperate Tests. This won't be executed, when imported externally
+# just for seperate manual tests. This won't be executed, when imported externally
 # will be removed once Tool is completed
 if __name__ == "__main__":
     resource_dir = os.path.join(os.getcwd(), os.pardir, "resources")
