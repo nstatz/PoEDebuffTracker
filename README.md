@@ -10,7 +10,8 @@ This repository includes:
 * A requirements.txt file which includes all dependencies
 * All code to get the tool running
 * [Template images](resources/debuff_templates) for negative status effect
-* An extensive [technical documentation](docs/_build/html/index.html)
+* An extensive [technical documentation](docs/_build/html/index.html). Clone this repo and open this file locally.
+Github does not render this html file.
 * [Unittests](tests)
 
 <b>How to run this tool</b>:
@@ -28,6 +29,6 @@ resolution you might have to create your own debuff templates (as NO AI for obje
 * Tools grabs your screen every second and checks if it find one of the effects where remove_debuff is true in
 [resources/config.toml](resources/config.toml)
 * If a debuff is found, it will be removed by using the configured key
-* This tool will only check the configured area of your screen for negative effects
+* This tool will only check the configured area of your screen for negative effects.
 This area is marked by a green rectangle. The detected negative effect is marked by a red rectangle.
 ![DebuffDetection](resources/docuentation_pictures/documentation_example.png)
