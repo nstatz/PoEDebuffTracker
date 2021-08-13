@@ -5,9 +5,7 @@ import toml
 from debufftracker import errors as customErrors
 from debufftracker import status
 import time
-import logging
 import os
-import json
 from threading import Thread
 
 
@@ -21,6 +19,12 @@ class ConfigReader:
 
 
     def get_imagetransformation_config(self):
+        """
+        Get config for image transformation
+
+        :return: self.__toml_content["imagetransformation"], dictionary with image transformation config from config.toml
+        :rtype: dict
+        """
         allowed_colors = ["color"]
         if self.__toml_content["imagetransformation"]["color_type"].lower() not in allowed_colors:
             raise customErrors.ColorConfigError(self.__toml_content["imagetransformation"]["color_type"])
@@ -28,6 +32,13 @@ class ConfigReader:
 
 
     def get_debuff_configs(self, status_type): # ailment/curse/ground
+        """
+        Returns Config of a status type. Status type
+        :param status_type: Name of the status (ailment/curse/ground)
+        :type status_type: str
+        :return: status_config, a dictionary containing the config data of a status from config.toml
+        :rtype: dict
+        """
         status_config = self.__toml_content[status_type]
         return status_config
 

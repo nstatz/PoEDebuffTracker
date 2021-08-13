@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>debufftracker package &mdash; PoEDebuffTracker 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PoEDebuffTracker
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">debufftracker package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-debufftracker.errors">debufftracker.errors module</a></li>
+<li><a class="reference internal" href="#module-debufftracker.main">debufftracker.main module</a></li>
+<li><a class="reference internal" href="#module-debufftracker.status">debufftracker.status module</a></li>
+<li><a class="reference internal" href="#module-debufftracker">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PoEDebuffTracker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>debufftracker package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/debufftracker.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="debufftracker-package">
+<h1>debufftracker package<a class="headerlink" href="#debufftracker-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-debufftracker.errors">
+<span id="debufftracker-errors-module"></span><h2>debufftracker.errors module<a class="headerlink" href="#module-debufftracker.errors" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="debufftracker.errors.ColorConfigError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.errors.</span></span><span class="sig-name descname"><span class="pre">ColorConfigError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.errors.ColorConfigError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#debufftracker.errors.ConfigError" title="debufftracker.errors.ConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">debufftracker.errors.ConfigError</span></code></a></p>
+<p>Exception class that can be raised if invalid colors are used</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="debufftracker.errors.ConfigError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.errors.</span></span><span class="sig-name descname"><span class="pre">ConfigError</span></span><a class="headerlink" href="#debufftracker.errors.ConfigError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Dummy class that might be used later. Implement dummy class to prevent unnecessary refactoring</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="debufftracker.errors.FileConfigError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.errors.</span></span><span class="sig-name descname"><span class="pre">FileConfigError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.errors.FileConfigError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#debufftracker.errors.ConfigError" title="debufftracker.errors.ConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">debufftracker.errors.ConfigError</span></code></a></p>
+<p>Exception class that can be raised if invalid colors are used</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="debufftracker.errors.StatusConfigError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.errors.</span></span><span class="sig-name descname"><span class="pre">StatusConfigError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">problem_string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.errors.StatusConfigError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#debufftracker.errors.ConfigError" title="debufftracker.errors.ConfigError"><code class="xref py py-class docutils literal notranslate"><span class="pre">debufftracker.errors.ConfigError</span></code></a></p>
+<p>Exception class that can be raised if invalid status config is used (ailment, curse, ground)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-debufftracker.main">
+<span id="debufftracker-main-module"></span><h2>debufftracker.main module<a class="headerlink" href="#module-debufftracker.main" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="debufftracker.main.ConfigReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.main.</span></span><span class="sig-name descname"><span class="pre">ConfigReader</span></span><a class="headerlink" href="#debufftracker.main.ConfigReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class contains functions to read and return configuration Data</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ConfigReader.get_debuff_configs">
+<span class="sig-name descname"><span class="pre">get_debuff_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ConfigReader.get_debuff_configs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ConfigReader.get_imagetransformation_config">
+<span class="sig-name descname"><span class="pre">get_imagetransformation_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ConfigReader.get_imagetransformation_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="debufftracker.main.ScreenTracker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.main.</span></span><span class="sig-name descname"><span class="pre">ScreenTracker</span></span><a class="headerlink" href="#debufftracker.main.ScreenTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class contains functions to track the screen content</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ScreenTracker.create_removestatus_dict">
+<span class="sig-name descname"><span class="pre">create_removestatus_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ScreenTracker.create_removestatus_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over each status type in [“ailment”, “curse”, “ground”] and adds the status specific config
+to dictionary relevant_dicts. Then return relevant dict
+:return: relevant_dicts, a dictionary with status configs.
+:rtype: Dictionary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ScreenTracker.create_status_instances">
+<span class="sig-name descname"><span class="pre">create_status_instances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ScreenTracker.create_status_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create instances of status.Status and add them to a dictionary self.__status_instances.
+Using this dictionary enables managing those instances, when necessary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ScreenTracker.grab_transform_screen">
+<span class="sig-name descname"><span class="pre">grab_transform_screen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ScreenTracker.grab_transform_screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a partial Screenshot, transform to screenshot to numpy array and return transformed screenshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>screen_cv2, partial screenshot that contains all 3 color channels. Order is BGR</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ScreenTracker.manage_status_instances">
+<span class="sig-name descname"><span class="pre">manage_status_instances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ScreenTracker.manage_status_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a partial screenshot, then iterates over the status.Status instances and checks if a harmful effect of
+type of instance was found. If so, remove the effect. Threads will be joined to prevent chaotic behaviour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>debuffs_dict, a dict that contains the negative effect and a dt stamp when it was recognized</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.main.ScreenTracker.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.main.ScreenTracker.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinitive loop that calls self.manage_status_instances() which causes any found negative effects to be removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-debufftracker.status">
+<span id="debufftracker-status-module"></span><h2>debufftracker.status module<a class="headerlink" href="#module-debufftracker.status" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="debufftracker.status.Status">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">debufftracker.status.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.status.Status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.status.Status.check_ailment">
+<span class="sig-name descname"><span class="pre">check_ailment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.status.Status.check_ailment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the ailment type of this class was found</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_screen</strong> (<em>np.array</em>) – Screenshot of current game sequence</p></li>
+<li><p><strong>show_match</strong> (<em>Boolean</em>) – Parameter to force show a match. Only for debugging purposes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True of ailment was found, False if not.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.status.Status.perform_action">
+<span class="sig-name descname"><span class="pre">perform_action</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.status.Status.perform_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True / False wether or not the flask_key was pressed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if flask_key was pressed</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="debufftracker.status.Status.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_screen</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#debufftracker.status.Status.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Causes the the effect check to run and removes effect if it exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>current_screen</strong> (<em>np.array</em>) – partial screenshot of upper left area</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>empty dict if no action, action_dict if debuff was removed</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-debufftracker">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-debufftracker" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, nstatz.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
