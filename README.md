@@ -27,7 +27,7 @@ resolution you might have to create your own debuff templates (as NO AI for obje
 
 
 <b>How it works</b>:
-* Tools grabs your screen every second and checks if it find one of the effects where remove_debuff is true in
+* Tool grabs your screen every second and checks if it can find one of the effects where remove_debuff is true in
 [resources/config.toml](resources/config.toml)
 * If a debuff is found, it will be removed by using the configured key
 * This tool will only check the configured area of your screen for negative effects.
