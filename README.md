@@ -14,7 +14,8 @@ This repository includes:
 Github does not render this html file.
 * [Unittests](tests)
 
-<h2>How to run this tool:</h2>
+<b>How to run this tool:</b>
+
 * Adapt your bindings to effects that must tracked be removed in [resources/config.toml](resources/config.toml)
 * This tool already covers the most important removable effects. You can add more effects by adding an image
 of the debuff to [resources/debuff_templates](resources/debuff_templates) and name it effectname.png.
