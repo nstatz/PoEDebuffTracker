@@ -9,12 +9,12 @@ Python version: 3.8.11
 This repository includes:
 * A requirements.txt file which includes all dependencies
 * All code to get the tool running
-* [Template images](resources/debuff_templates) for negative status effect
+* [Template images](resources/debuff_templates) to detect negative status effects
 * An extensive [technical documentation](docs/_build/html/index.html). Clone this repo and open this file locally.
 Github does not render this html file.
 * [Unittests](tests)
 
-<h2>How to run this tool</h2>:
+<h2>How to run this tool:</h2>
 * Adapt your bindings to effects that must tracked be removed in [resources/config.toml](resources/config.toml)
 * This tool already covers the most important removable effects. You can add more effects by adding an image
 of the debuff to [resources/debuff_templates](resources/debuff_templates) and name it effectname.png.
@@ -30,5 +30,6 @@ resolution you might have to create your own debuff templates (as NO AI for obje
 [resources/config.toml](resources/config.toml)
 * If a debuff is found, it will be removed by using the configured key
 * This tool will only check the configured area of your screen for negative effects.
+* This tool can only detect negative effects for which a template exists
 This area is marked by a green rectangle. The detected negative effect is marked by a red rectangle.
 ![DebuffDetection](resources/docuentation_pictures/documentation_example.png)
