@@ -3,9 +3,14 @@ import pytest
 import os
 import cv2
 
+current_dir = os.path.dirname( os.path.abspath(__file__))
+project_dir = os.path.join(current_dir, os.path.pardir)
+
+# set project source folder as working directory
+os.chdir(project_dir)
 
 def test_template_image_folder():
-    template_folder = os.path.join(os.getcwd(), os.pardir, "resources", "debuff_templates")
+    template_folder = os.path.join("resources", "debuff_templates")
     assert os.path.isdir(template_folder), "template_folder does not exist"
 
 
@@ -52,10 +57,11 @@ configs = \
     }
 ]
 
-screen_bleed = os.path.join(os.getcwd(), os.pardir, "resources", "example_pictures", "ailments", "bleed", "1.png")
-screen_poison = os.path.join(os.getcwd(), os.pardir, "resources", "example_pictures", "ailments", "poison", "2.png")
+
+screen_bleed = os.path.join("resources", "example_pictures", "ailments", "bleed", "1.png")
+screen_poison = os.path.join("resources", "example_pictures", "ailments", "poison", "2.png")
 # this one might cause a false positive, if major changes occur
-screen_shock = os.path.join(os.getcwd(), os.pardir, "resources", "example_pictures", "ailments", "shock", "3.png")
+screen_shock = os.path.join("resources", "example_pictures", "ailments", "shock", "3.png")
 
 image_paths = [screen_bleed, screen_poison, screen_shock]
 results = [True, True, False]

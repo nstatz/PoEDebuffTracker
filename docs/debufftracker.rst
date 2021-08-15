@@ -12,10 +12,10 @@ debufftracker.errors module
    :undoc-members:
    :show-inheritance:
 
-debufftracker.main module
--------------------------
+debufftracker.screen\_tools module
+----------------------------------
 
-.. automodule:: debufftracker.main
+.. automodule:: debufftracker.screen_tools
    :members:
    :undoc-members:
    :show-inheritance:

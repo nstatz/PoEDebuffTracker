@@ -44,10 +44,11 @@ class Status:
         if config["color_type"] == "color":
             self.__color_method = cv2.IMREAD_COLOR
 
-        template_path = os.path.join(os.getcwd(), os.pardir, "resources", "debuff_templates", f"{self.__type}.png")
+        template_path = os.path.join("resources", "debuff_templates", f"{self.__type}.png")
         file_exists = os.path.exists(template_path)
         if not file_exists:
             raise customErrors.FileConfigError(template_path)
+
         self.__template_img = cv2.imread(template_path, self.__color_method)
 
         self.__keyboad = Controller()

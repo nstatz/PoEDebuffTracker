@@ -14,12 +14,12 @@ This repository includes:
 Github does not render this html file.
 * [Unittests](tests)
 
-<b>How to run this tool</b>:
+<h2>How to run this tool</h2>:
 * Adapt your bindings to effects that must tracked be removed in [resources/config.toml](resources/config.toml)
 * This tool already covers the most important removable effects. You can add more effects by adding an image
 of the debuff to [resources/debuff_templates](resources/debuff_templates) and name it effectname.png.
 Effectname must be the same in [resources/config.toml](resources/config.toml)
-* Start [debufftracker/main.py](debufftracker/main.py)
+* Execute ``python -m debufftracker`` from the project directory (PoEDebuffTracker)
 
 Important: This tool's templates currently only work with a screen resoultion of 1920 * 1080. If you use a different
 resolution you might have to create your own debuff templates (as NO AI for object detection is involved).
