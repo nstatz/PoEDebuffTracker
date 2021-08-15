@@ -14,7 +14,7 @@ class ConfigReader:
     This class contains functions to read and return configuration Data
     """
     def __init__(self):
-        self.__config_path = os.path.join(os.getcwd(), os.pardir, "resources", "config.toml")
+        self.__config_path = os.path.join("resources", "config.toml")
         self.__toml_content = toml.load(f=self.__config_path)
 
 
@@ -204,6 +204,12 @@ class ScreenTracker:
 
 
 if __name__ == "__main__":
+    current_dir = os.path.dirname( os.path.abspath(__file__))
+    project_dir = os.path.join(current_dir, os.path.pardir)
+
+    # set project source folder as working directory
+    os.chdir(project_dir)
+
     screentracker = ScreenTracker()
     screentracker.create_status_instances()
     screentracker.run()

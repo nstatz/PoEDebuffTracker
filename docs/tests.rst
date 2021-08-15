@@ -4,10 +4,10 @@ tests package
 Submodules
 ----------
 
-tests.test\_main module
------------------------
+tests.test\_screentools module
+------------------------------
 
-.. automodule:: tests.test_main
+.. automodule:: tests.test_screentools
    :members:
    :undoc-members:
    :show-inheritance:
